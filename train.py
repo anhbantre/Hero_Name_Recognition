@@ -29,18 +29,19 @@ def train(model,
         valid_loss = []
         valid_acc = []
 
+        # Training
+        model.train()
         for data in train_dataloader:
             img, label = data
             img, label = img.to(device), label.to(device)
-
-            optimizer.zero_grad()
             
             output = model(img)
 
             # Loss computation
             loss = criterion(output, label)
 
-            # Backpropagation of gradients                                                                                                            
+            # Backpropagation of gradients
+            optimizer.zero_grad()                                                                                                         
             loss.backward()
             optimizer.step()
 
@@ -50,6 +51,7 @@ def train(model,
             # Calculate accuracy by torchmetrics
             train_acc.append(accuracy(output, label.to(torch.int8)))
 
+        # Evaluate
         with torch.no_grad():
             model.eval()
             for data in valid_dataloader:

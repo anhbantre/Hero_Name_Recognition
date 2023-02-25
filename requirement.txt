@@ -1,0 +1,8 @@
+torch
+timm
+Pillow
+numpy
+opencv-python
+torchmetrics
+comet_ml
+albumentations

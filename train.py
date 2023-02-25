@@ -102,7 +102,7 @@ def get_args():
     parser.add_argument('--data', '--d', type=str, default='data/train', help='Path to folder containing training data')
     parser.add_argument('--label', '--lb', type=str, default='data/hero_names.txt', help='Path to label file')
     parser.add_argument('--validation-split', '--v', dest='val', type=float, default=0.2, help='Fraction of data used as validation')
-    parser.add_argument('--backbone', type=str, default='resnet50', help='Model name from timm to be used as backbone')
+    parser.add_argument('--backbone', type=str, default='resnet18', help='Model name from timm to be used as backbone')
     parser.add_argument('--epochs', '--e', type=int, default=50, help='Number of epochs')
     parser.add_argument('--learning-rate', '--lr', type=float, default=1e-4, help='Learning rate', dest='lr')
     parser.add_argument('--batch-size', '--b', type=int, default=32, help='Batch size')
@@ -119,10 +119,10 @@ if __name__ == '__main__':
     train_data, val_data = split_data(data_path = args.data, label_path = args.label, validation_split = args.val)
 
     train_dataset = HeroNameDataset(data_path = args.data, split_data = train_data, label_path = args.label)
-    train_dataloader = DataLoader(train_dataset, batch_size = args.batch_size)
+    train_dataloader = DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True)
 
     valid_dataset = HeroNameDataset(data_path = args.data, split_data = val_data, label_path = args.label)
-    valid_dataloader = DataLoader(valid_dataset, batch_size = args.batch_size)
+    valid_dataloader = DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True)
 
     # Load model
     model = HeroModel(args.backbone)

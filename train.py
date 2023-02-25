@@ -1,5 +1,6 @@
 import argparse
 import numpy as np
+from comet_ml import Experiment
 
 import torch
 import torchmetrics
@@ -11,6 +12,9 @@ from model.model import HeroModel
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Define a new experiment 
+experiment = Experiment(project_name="Hero_Name_Recognition", api_key='tFwkmJwXOnq1iKgGI7i2eMKlr')
 
 def train(model,
           criterion,
@@ -84,6 +88,12 @@ def train(model,
                 torch.save(model.state_dict(), save_path + f'weight_{epoch}_{valid_loss_avg}.pt')
                 print(f'Save weight with the loss {valid_loss_avg}, model improved the loss from {valid_loss_min} to {valid_loss_avg}')
                 valid_loss_min = valid_loss_avg
+            
+            # Log metrics
+            experiment.log_metric("train loss", train_loss_avg, step = epoch)
+            experiment.log_metric("valid loss", valid_loss_avg, step = epoch)
+            experiment.log_metric("train accuracy", train_acc_avg, step = epoch)
+            experiment.log_metric("valid accuracy", valid_acc_avg, step = epoch)
 
     return model
 

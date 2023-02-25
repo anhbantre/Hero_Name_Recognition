@@ -1,2 +1,6 @@
 # Data
 data/train*
+data/test*
+
+# Compiled fie
+__pycache__/

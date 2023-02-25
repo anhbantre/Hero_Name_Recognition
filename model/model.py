@@ -9,7 +9,7 @@ class HeroModel(nn.Module):
         
         # Load backbone from timm
         self.backbone = timm.create_model(model_name = backbone_name, pretrained = True, num_classes = 64)
-        self.softmax = nn.Softmax()
+        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x: torch.Tensor):
         return self.softmax(self.backbone(x))

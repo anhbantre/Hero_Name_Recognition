@@ -23,7 +23,7 @@ class HeroNameDataset(Dataset):
         self.label_path = label_path
         self.list_img_name = split_data
         self.transform = A.Compose([
-            A.Resize(height=50, width=100, always_apply=True),
+            A.Resize(height=224, width=224, always_apply=True),
             A.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
             ToTensorV2(always_apply=True)
         ])
@@ -40,7 +40,7 @@ class HeroNameDataset(Dataset):
         w, h = img.size
 
         # Cut the image into two equal parts and take the left part
-        img = img.crop((0, 0, w/2, h))
+        img = img.crop((20, 0, w/4, h))
         img = np.array(img)
         img = self.transform(image = img)["image"]
 

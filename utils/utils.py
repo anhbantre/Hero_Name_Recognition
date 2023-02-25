@@ -1,9 +1,19 @@
 import os
 import glob
 import random
+import numpy as np
 
-data_path = r'D:\AI_Engineer_Test\Hero_Name_Recognition\data\train'
-label_path = r'D:\AI_Engineer_Test\Hero_Name_Recognition\data\hero_names.txt'
+import torch
+
+
+def set_seed(seed: int):
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = True
 
 def label_dict(label_path):
     """ Create a dictionary to store hero names corresponding to id classes 
@@ -57,7 +67,7 @@ def label_img(list_img_name, label_path):
     return labeled_data
 
 
-def split_data(data_path, validation_split = 0.2):
+def split_data(data_path, label_path, validation_split = 0.2):
     """ Split data to a train and a test dataset 
     Args:
         data_path (str) -- A path of folder leads to all image paths

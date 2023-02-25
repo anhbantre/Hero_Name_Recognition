@@ -5,7 +5,9 @@ from torchvision import datasets
 from torch.utils.data import Dataset, DataLoader
 from albumentations.pytorch.transforms import ToTensorV2
 
-from utils import label_img
+import numpy as np
+
+from utils.utils import label_img
 
 
 class HeroNameDataset(Dataset):
@@ -19,7 +21,6 @@ class HeroNameDataset(Dataset):
     def __init__(self, data_path, split_data, label_path):
         self.data_path = data_path
         self.label_path = label_path
-        self.transform = transform
         self.list_img_name = split_data
         self.transform = A.Compose([
             A.Resize(height=50, width=100, always_apply=True),
@@ -28,7 +29,7 @@ class HeroNameDataset(Dataset):
         ])
 
         # Label images
-        labeled_img = label_img(self.list_img_name, self.label_path)
+        self.labeled_img = label_img(self.list_img_name, self.label_path)
 
     def __len__(self):
         return int(len(self.list_img_name))
@@ -40,9 +41,10 @@ class HeroNameDataset(Dataset):
 
         # Cut the image into two equal parts and take the left part
         img = img.crop((0, 0, w/2, h))
-        img = self.transform(img)
+        img = np.array(img)
+        img = self.transform(image = img)["image"]
 
         # Get the label
-        label = labeled_img[self.list_img_name[idx]]
+        label = self.labeled_img[self.list_img_name[idx]]
 
         return img, label
